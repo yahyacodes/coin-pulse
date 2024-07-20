@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import {
   Card,
@@ -21,33 +21,40 @@ import {
 import {
   Pagination,
   PaginationContent,
+  PaginationEllipsis,
   PaginationItem,
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import SkeletonCard from "./skeleton-card";
+import SkeletonCard from "@/components/skeleton-card";
 
-interface CoinData {
-  id: number;
+interface TrendingCoinData {
+  data: any;
+  coins: any;
+  id: string;
   name: string;
-  symbol: string;
-  image: string;
-  market_cap_rank: number;
+  thumb: string;
   price_change_percentage_24h: number;
-  current_price: number;
+  price: number;
+  price_btc: string;
   market_cap: number;
+  symbol: string;
 }
 
-export default function Coin() {
-  const [allCoins, setAllCoins] = useState<CoinData[]>([]);
+interface TrendingResponse {
+  coins: { item: TrendingCoinData }[];
+}
+
+export default function TrendingCoin() {
+  const [allTrends, setAllTrends] = useState<TrendingCoinData[]>([]);
   const [isClient, setIsClient] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(20);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
 
   const lastItemIndex = currentPage * itemsPerPage;
   const firstItemIndex = lastItemIndex - itemsPerPage;
-  const currentItems = allCoins.slice(firstItemIndex, lastItemIndex);
+  const currentItems = allTrends.slice(firstItemIndex, lastItemIndex);
 
   const fetchCryptoData = async () => {
     const options = {
@@ -60,14 +67,15 @@ export default function Coin() {
 
     try {
       const res = await fetch(
-        "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd",
+        "https://api.coingecko.com/api/v3/search/trending?vs_currency=usd",
         options
       );
       if (!res.ok) {
         throw new Error("Failed to fetch data");
       }
-      const data: CoinData[] = await res.json();
-      setAllCoins(data);
+      const data: TrendingResponse = await res.json();
+      const trends = data.coins.map((trend) => trend.item);
+      setAllTrends(trends);
     } catch (error: any) {
       console.error(error);
     }
@@ -83,63 +91,55 @@ export default function Coin() {
       {isClient ? (
         <Card className="mt-4 w-full max-w-7xl">
           <CardHeader>
-            <CardTitle>Products</CardTitle>
+            <CardTitle>Trending</CardTitle>
             <CardDescription>
-              Manage your products and view their sales performance.
+              Top 15 trending coins (sorted by the most popular user searches)
             </CardDescription>
           </CardHeader>
           <CardContent>
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead className="hidden w-[100px] sm:table-cell">
-                    #
-                  </TableHead>
                   <TableHead>Coin</TableHead>
                   <TableHead>Coin Name</TableHead>
                   <TableHead className="md:table-cell">Price</TableHead>
-                  <TableHead className="md:table-cell">24H Change</TableHead>
-                  <TableHead className="md:table-cell">Market Cap</TableHead>
-                  <TableHead>
-                    <span className="">Actions</span>
+                  <TableHead className="md:table-cell">
+                    24H Change (Btc)
                   </TableHead>
+                  <TableHead className="md:table-cell">Market Cap</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {currentItems.map((data) => (
-                  <TableRow key={data.id}>
-                    <TableCell className="hidden md:table-cell">
-                      {data.market_cap_rank}
-                    </TableCell>
+                {currentItems.map((trend) => (
+                  <TableRow key={trend.id}>
                     <TableCell className="hidden sm:table-cell">
                       <Image
                         alt="Product image"
                         className="aspect-square rounded-md object-cover"
                         height="30"
-                        src={data.image}
+                        src={trend.thumb}
                         width="30"
                       />
                     </TableCell>
                     <TableCell className="font-medium">
-                      {data.name + " - " + data.symbol}
+                      {trend.name + " - " + trend.symbol}
                     </TableCell>
                     <TableCell className="hidden md:table-cell">
-                      ${data.current_price.toLocaleString()}
+                      ${trend.data.price.toLocaleString()}
                     </TableCell>
                     <TableCell
                       className={
-                        data.price_change_percentage_24h > 0
+                        trend.data.price_change_percentage_24h.btc > 0
                           ? "text-green-600 text-md"
                           : "text-red-600 text-md"
                       }
                     >
-                      {Math.floor(data.price_change_percentage_24h * 100) / 100}
+                      {Math.floor(
+                        trend.data.price_change_percentage_24h.btc * 100
+                      ) / 100}
                     </TableCell>
                     <TableCell className="hidden md:table-cell">
-                      ${data.market_cap.toLocaleString()}
-                    </TableCell>
-                    <TableCell className="hidden md:table-cell">
-                      ${data.market_cap.toLocaleString()}
+                      {trend.data.market_cap}
                     </TableCell>
                   </TableRow>
                 ))}
@@ -148,7 +148,7 @@ export default function Coin() {
           </CardContent>
           <CardFooter>
             <PaginationSection
-              totalItems={allCoins.length}
+              totalItems={allTrends.length}
               itemsPerPage={itemsPerPage}
               currentPage={currentPage}
               setCurrentPage={setCurrentPage}

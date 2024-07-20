@@ -3,6 +3,7 @@ import "./globals.css";
 import { Poppins as FontSans } from "next/font/google";
 
 import { cn } from "@/lib/utils";
+import { MenuBar } from "@/components/menu-bar";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -28,6 +29,7 @@ export default function RootLayout({
           fontSans.variable
         )}
       >
+        <MenuBar />
         {children}
       </body>
     </html>
