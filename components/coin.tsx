@@ -27,6 +27,7 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import SkeletonCard from "./skeleton-card";
+import Link from "next/link";
 
 interface CoinData {
   id: number;
@@ -43,7 +44,7 @@ export default function Coin() {
   const [allCoins, setAllCoins] = useState<CoinData[]>([]);
   const [isClient, setIsClient] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(20);
+  const [itemsPerPage, setItemsPerPage] = useState(15);
 
   const lastItemIndex = currentPage * itemsPerPage;
   const firstItemIndex = lastItemIndex - itemsPerPage;
@@ -106,8 +107,8 @@ export default function Coin() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {currentItems.map((data) => (
-                  <TableRow key={data.id}>
+                {currentItems.map((data, index) => (
+                  <TableRow key={index}>
                     <TableCell className="hidden md:table-cell">
                       {data.market_cap_rank}
                     </TableCell>
@@ -121,7 +122,9 @@ export default function Coin() {
                       />
                     </TableCell>
                     <TableCell className="font-medium">
-                      {data.name + " - " + data.symbol}
+                      <Link href={`/coin-details/${data.id}`}>
+                        {data.name + " - " + data.symbol}
+                      </Link>
                     </TableCell>
                     <TableCell className="hidden md:table-cell">
                       ${data.current_price.toLocaleString()}

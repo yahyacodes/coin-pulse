@@ -21,7 +21,6 @@ import {
 import {
   Pagination,
   PaginationContent,
-  PaginationEllipsis,
   PaginationItem,
   PaginationLink,
   PaginationNext,
@@ -87,7 +86,7 @@ export default function TrendingCoin() {
   }, []);
 
   return (
-    <>
+    <div className="mx-auto flex flex-col items-center justify-center">
       {isClient ? (
         <Card className="mt-4 w-full max-w-7xl">
           <CardHeader>
@@ -158,7 +157,7 @@ export default function TrendingCoin() {
       ) : (
         <SkeletonCard />
       )}
-    </>
+    </div>
   );
 }
 

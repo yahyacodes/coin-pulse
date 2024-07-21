@@ -56,26 +56,34 @@ const components: { title: string; href: string; description: string }[] = [
 export function MenuBar() {
   return (
     <div className="mx-auto flex flex-col items-center justify-center p-2 mt-4">
-      <NavigationMenu className="border p-2 px-4 pr-4 rounded-full">
+      <NavigationMenu className="border rounded-md">
         <NavigationMenuList>
           <NavigationMenuItem>
-            <Link href="/docs" legacyBehavior passHref>
-              <NavigationMenuLink>Home</NavigationMenuLink>
+            <Link href="/" legacyBehavior passHref>
+              <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                Home
+              </NavigationMenuLink>
             </Link>
           </NavigationMenuItem>
           <NavigationMenuItem>
-            <Link href="/docs" legacyBehavior passHref>
-              <NavigationMenuLink>Trending Coins</NavigationMenuLink>
+            <Link href="/trending-coin" legacyBehavior passHref>
+              <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                Trending Coins
+              </NavigationMenuLink>
             </Link>
           </NavigationMenuItem>
           <NavigationMenuItem>
-            <Link href="/docs" legacyBehavior passHref>
-              <NavigationMenuLink>About</NavigationMenuLink>
+            <Link href="/about" legacyBehavior passHref>
+              <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                About
+              </NavigationMenuLink>
             </Link>
           </NavigationMenuItem>
           <NavigationMenuItem>
-            <Link href="/docs" legacyBehavior passHref>
-              <NavigationMenuLink>Conatct</NavigationMenuLink>
+            <Link href="/contact-us" legacyBehavior passHref>
+              <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                Contact
+              </NavigationMenuLink>
             </Link>
           </NavigationMenuItem>
         </NavigationMenuList>
