@@ -12,15 +12,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Check, AlertCircle } from "lucide-react";
 
 const Contact = () => {
@@ -40,7 +32,7 @@ const Contact = () => {
       setAlert({
         type: "success",
         message:
-          "Your message has been sent successfully. We'll get back to you soon!",
+          "We recieved your message successfully. We'll get back to you soon!",
       });
       // Reset form fields
       setName("");
@@ -52,85 +44,80 @@ const Contact = () => {
         message: "Please fill in all fields before submitting.",
       });
     }
-  };
 
-  const closeAlert = () => {
-    setAlert(null);
+    // Hide alert after 5 seconds
+    setTimeout(() => setAlert(null), 2000);
   };
 
   return (
-    <div className="mx-auto flex flex-col items-center justify-center p-40">
-      <Card className="mx-auto max-w-xl">
-        <CardHeader>
-          <CardTitle className="text-xl">Contact Us</CardTitle>
-          <CardDescription>
-            Enter your information to contact us and we will get back to you
-            soon!
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit}>
-            <div className="grid gap-4">
-              <div className="grid gap-2">
-                <Label htmlFor="first-name">Name</Label>
-                <Input
-                  id="first-name"
-                  placeholder="Max"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                />
-              </div>
-              <div className="grid gap-2">
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="m@example.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-              </div>
-              <div className="grid gap-2">
-                <Label htmlFor="subject">Subject</Label>
-                <Textarea
-                  rows={1}
-                  value={message}
-                  onChange={(e) => setMessage(e.target.value)}
-                />
-              </div>
-              <Button type="submit" className="w-full">
-                Send
-              </Button>
-            </div>
-          </form>
-        </CardContent>
-      </Card>
-
-      <AlertDialog open={alert !== null} onOpenChange={closeAlert}>
-        <AlertDialogContent
-          className={`${
-            alert?.type === "success" ? "bg-green-100" : "bg-red-100"
-          } border-2 ${
-            alert?.type === "success" ? "border-green-500" : "border-red-500"
+    <>
+      {alert && (
+        <Alert
+          className={`mt-4 max-w-2xl mx-auto ${
+            alert.type === "error"
+              ? "bg-red-100 border-red-400 text-red-700"
+              : "bg-green-100 border-green-400 text-green-700"
           }`}
         >
-          <AlertDialogHeader>
-            <AlertDialogTitle className="flex items-center">
-              {alert?.type === "success" ? (
-                <Check className="h-6 w-6 text-green-500 mr-2" />
-              ) : (
-                <AlertCircle className="h-6 w-6 text-red-500 mr-2" />
-              )}
-              {alert?.type === "success" ? "Success" : "Error"}
-            </AlertDialogTitle>
-            <AlertDialogDescription>{alert?.message}</AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogAction onClick={closeAlert}>OK</AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-    </div>
+          {alert.type === "success" ? (
+            <Check className="h-4 w-4" />
+          ) : (
+            <AlertCircle className="h-4 w-4" />
+          )}
+          <AlertTitle>
+            {alert.type === "success" ? "Success" : "Error"}
+          </AlertTitle>
+          <AlertDescription>{alert.message}</AlertDescription>
+        </Alert>
+      )}
+      <div className="mx-auto flex flex-col items-center justify-center p-40">
+        <Card className="mx-auto max-w-xl">
+          <CardHeader>
+            <CardTitle className="text-xl">Contact Us</CardTitle>
+            <CardDescription>
+              Enter your information to contact us and we will get back to you
+              soon!
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleSubmit}>
+              <div className="grid gap-4">
+                <div className="grid gap-2">
+                  <Label htmlFor="first-name">Name</Label>
+                  <Input
+                    id="first-name"
+                    placeholder="Max"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                  />
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="email">Email</Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    placeholder="m@example.com"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="subject">Subject</Label>
+                  <Textarea
+                    rows={1}
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
+                  />
+                </div>
+                <Button type="submit" className="w-full">
+                  Send
+                </Button>
+              </div>
+            </form>
+          </CardContent>
+        </Card>
+      </div>
+    </>
   );
 };
 

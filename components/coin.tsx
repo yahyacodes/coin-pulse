@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import Image from "next/image";
 import {
   Card,
@@ -28,6 +28,7 @@ import {
 } from "@/components/ui/pagination";
 import SkeletonCard from "./skeleton-card";
 import Link from "next/link";
+import { Input } from "@/components/ui/input";
 
 interface CoinData {
   id: number;
@@ -42,13 +43,15 @@ interface CoinData {
 
 export default function Coin() {
   const [allCoins, setAllCoins] = useState<CoinData[]>([]);
+  const [filteredCoins, setFilteredCoins] = useState<CoinData[]>([]);
   const [isClient, setIsClient] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(15);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const lastItemIndex = currentPage * itemsPerPage;
   const firstItemIndex = lastItemIndex - itemsPerPage;
-  const currentItems = allCoins.slice(firstItemIndex, lastItemIndex);
+  const currentItems = filteredCoins.slice(firstItemIndex, lastItemIndex);
 
   const fetchCryptoData = async () => {
     const options = {
@@ -69,6 +72,7 @@ export default function Coin() {
       }
       const data: CoinData[] = await res.json();
       setAllCoins(data);
+      setFilteredCoins(data);
     } catch (error: any) {
       console.error(error);
     }
@@ -79,14 +83,47 @@ export default function Coin() {
     setIsClient(true);
   }, []);
 
+  useEffect(() => {
+    const filtered = allCoins.filter(
+      (coin) =>
+        coin.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        coin.symbol.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setFilteredCoins(filtered);
+    setCurrentPage(1);
+  }, [searchTerm, allCoins]);
+
+  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(event.target.value);
+  };
+
   return (
     <>
+      <div className="container mx-auto px-4 py-16 sm:py-24 lg:py-32 text-center max-w-4xl">
+        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight mb-6">
+          Real-Time Crypto Insights at Your Fingertips
+        </h1>
+        <p className="text-lg sm:text-xl mb-8 text-zinc-400">
+          CoinPulse harnesses the power of CoinGecko's API to deliver
+          up-to-the-minute cryptocurrency data and analytics.
+        </p>
+        <div className="w-full max-w-md mx-auto">
+          <Input
+            type="search"
+            placeholder="Search Crypto....."
+            name="search"
+            value={searchTerm}
+            onChange={handleSearch}
+          />
+        </div>
+      </div>
       {isClient ? (
-        <Card className="mt-4 w-full max-w-7xl">
+        <Card className="mt-4 w-full max-w-7xl mb-10">
           <CardHeader>
-            <CardTitle>Products</CardTitle>
+            <CardTitle>Ctypto Currency Prices By Market Cap</CardTitle>
             <CardDescription>
-              Manage your products and view their sales performance.
+              Browse insights and keep track of your desired crypto currency
+              price
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -151,7 +188,7 @@ export default function Coin() {
           </CardContent>
           <CardFooter>
             <PaginationSection
-              totalItems={allCoins.length}
+              totalItems={filteredCoins.length}
               itemsPerPage={itemsPerPage}
               currentPage={currentPage}
               setCurrentPage={setCurrentPage}
