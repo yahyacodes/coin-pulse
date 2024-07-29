@@ -28,6 +28,7 @@ import {
 } from "@/components/ui/pagination";
 import SkeletonCard from "@/components/skeleton-card";
 import { Input } from "@/components/ui/input";
+import Link from "next/link";
 
 interface TrendingCoinData {
   data: any;
@@ -162,7 +163,9 @@ export default function TrendingCoin() {
                         />
                       </TableCell>
                       <TableCell className="font-medium">
-                        {trend.name + " - " + trend.symbol}
+                        <Link href={`/coin-details/${trend.id}`}>
+                          {trend.name + " - " + trend.symbol}
+                        </Link>
                       </TableCell>
                       <TableCell className="hidden md:table-cell">
                         ${trend.data.price.toLocaleString()}

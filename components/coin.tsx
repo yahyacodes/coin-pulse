@@ -1,6 +1,6 @@
 "use client";
 
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import {
   Card,
@@ -26,7 +26,6 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import SkeletonCard from "./skeleton-card";
 import Link from "next/link";
 import { Input } from "@/components/ui/input";
 
@@ -104,8 +103,11 @@ export default function Coin() {
           Real-Time Crypto Insights at Your Fingertips
         </h1>
         <p className="text-lg sm:text-xl mb-8 text-zinc-400">
-          CoinPulse harnesses the power of CoinGecko's API to deliver
-          up-to-the-minute cryptocurrency data and analytics.
+          CoinPulse harnesses the power of{" "}
+          <Link href="https://www.coingecko.com/" target="_blank">
+            CoinGecko's API
+          </Link>{" "}
+          to deliver up-to-the-minute cryptocurrency data and analytics.
         </p>
         <div className="w-full max-w-md mx-auto">
           <Input

@@ -51,7 +51,6 @@ const HistoricalData: React.FC<HistoryDataChart> = ({ historyData }) => {
         price: item[1],
       }));
       setData(newData);
-      console.log("Processed data:", newData);
     }
   }, [historyData]);
 
