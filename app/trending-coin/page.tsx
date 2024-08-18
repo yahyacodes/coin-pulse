@@ -143,11 +143,15 @@ export default function TrendingCoin() {
                   <TableRow>
                     <TableHead>Coin</TableHead>
                     <TableHead>Coin Name</TableHead>
-                    <TableHead className="md:table-cell">Price</TableHead>
-                    <TableHead className="md:table-cell">
+                    <TableHead className="hidden md:table-cell">
+                      Price
+                    </TableHead>
+                    <TableHead className="hidden md:table-cell">
                       24H Change (Btc)
                     </TableHead>
-                    <TableHead className="md:table-cell">Market Cap</TableHead>
+                    <TableHead className="hidden md:table-cell">
+                      Market Cap
+                    </TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>

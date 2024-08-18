@@ -137,9 +137,13 @@ export default function Coin() {
                   </TableHead>
                   <TableHead>Coin</TableHead>
                   <TableHead>Coin Name</TableHead>
-                  <TableHead className="md:table-cell">Price</TableHead>
-                  <TableHead className="md:table-cell">24H Change</TableHead>
-                  <TableHead className="md:table-cell">Market Cap</TableHead>
+                  <TableHead className="hidden md:table-cell">Price</TableHead>
+                  <TableHead className="hidden md:table-cell">
+                    24H Change
+                  </TableHead>
+                  <TableHead className="hidden md:table-cell">
+                    Market Cap
+                  </TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -255,9 +259,9 @@ function PaginationSection({
             key={index}
             className={currentPage === page ? "bg-neutral-100 rounded-md" : ""}
           >
-            <PaginationLink onClick={() => setCurrentPage(page)}>
+            {/* <PaginationLink onClick={() => setCurrentPage(page)}>
               {page}
-            </PaginationLink>
+            </PaginationLink> */}
           </PaginationItem>
         ))}
         <PaginationItem>
